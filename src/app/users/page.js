@@ -71,7 +71,10 @@ const UsersPage = () => {
       )}</div>
       <LogoutButton className="mt-4" />
 	  </div>
-    ):(<></>)}
+    ):(<div><h1>Sorry!</h1>
+		<p>Please Login to view this page</p>
+		</div>
+	)}
 	</main>
   );
 };
