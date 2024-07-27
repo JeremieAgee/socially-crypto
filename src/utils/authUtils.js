@@ -3,20 +3,22 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 } from "firebase/auth";
+import { addADoc } from "./firebaseUtils";
+import { auth, db } from "../../firebase.config";
 
-import { auth } from "../../firebase.config";
-
-async function registerUser(email, password) {
+async function registerUser(email, password, user) {
 	createUserWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
 			// Signed up
 			const user = userCredential.user;
+
 		})
 		.catch((error) => {
 			const errorCode = error.code;
 			const errorMessage = error.message;
 			console.log("error creating user: ", errorCode, errorMessage);
 		});
+		addADoc(db, "users", user)
 }
 
 async function login(email, password) {
@@ -25,7 +27,6 @@ async function login(email, password) {
 			// Signed in
 			const user = userCredential.user;
 			auth.currentUser = user;
-			
 		})
 		.catch((error) => {
 			const errorCode = error.code;

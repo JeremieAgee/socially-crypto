@@ -1,34 +1,20 @@
 import { useState } from "react";
-import { addADoc } from "@/utils/firebaseUtils";
-import { auth, db } from "../../firebase.config";
+import { SocialSite } from "@/utils/userDisplay";
 
-function AddPost({ onClose }) {
+function AddPost({ onClose, user }) {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
-	const [visibility, setVisibility] = useState("public");
-	const [friends, setFriends] = useState([]);
-
+	const [currentUser, setCurrentUser] = useState(user);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const user = auth.currentUser;
-
-		if (user) {
-			await addADoc(
-				db,
-				"posts",
-				{
-					title,
-					content,
-					creatorUid: user.uid,
-					visibility,
-					validUids: visibility === "private" ? friends : [],
-				},
-				visibility
-			);
+		let site = new SocialSite([],[]);
+		await site.setSite();
+		let thisPost = {creatorUid:currentUser.uid, title, content, creatorUsername:currentUser.username, id:""}
+		if (currentUser) {
+			site.addPost(thisPost);
 			setTitle("");
 			setContent("");
-			setVisibility("public");
-			setFriends([]);
+			
 			onClose(); // Close the AddPost component after successful submission
 		} else {
 			console.log("User not authenticated");

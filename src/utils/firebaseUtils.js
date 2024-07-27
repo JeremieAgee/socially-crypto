@@ -15,11 +15,10 @@ import {
  */
 async function getAllDocs(db, collectionName) {
 	try {const snapshot = await getDocs(collection(db, collectionName));
-	const collectionList = snapshot.docs.map((doc) => ({
-		id: doc.id,
-		data: doc.data(),
-	}));
-	return collectionList;} catch(error) {
+	const collectionList = snapshot.docs.map((doc) => ( doc.data()
+	));
+	return collectionList;
+} catch(error) {
 		console.log(error);
 	}
 }
@@ -63,7 +62,7 @@ async function removeADoc(db, collectionName, objectId) {
  * @param {string} collectionName The name of a Firestore db collection
  * @param {object} collectionObject An object representing a collection document
  * @param {string} objectId The Id of the document you are deleting
- 
+
 */
 async function updateADoc(
 	db,

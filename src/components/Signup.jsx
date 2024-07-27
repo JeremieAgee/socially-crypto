@@ -4,19 +4,28 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/utils/authUtils";
 import { auth } from "../../firebase.config";
-
+import { User, SocialSite } from "@/utils/userDisplay";
 const Signup = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [fName, setFName] = useState("");
+	const [lName, setLName] = useState("");
+	const [username, setUsername] = useState("");
+	const [user, setUser] = useState(null)
 	const router = useRouter();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		try {
 			await registerUser(email, password);
-			if(auth.currentUser){
-			router.push("/users");
-		} // Redirect to the Users page
+			if (auth.currentUser) {
+				setUser(new User(fName, lName, email, username, auth.currentUser.uid))
+				let site = new SocialSite();
+				site.setSite();
+				site.addUser(user);
+				router.push("/users");
+			} // Redirect to the Users page
 		} catch (error) {
 			console.error("Error signing up:", error);
 		}
@@ -42,7 +51,48 @@ const Signup = () => {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</div>
+					<div>
+						<label htmlFor="fname" className="block text-sm font-medium">
+							First Name
+						</label>
+						<input
+							id="fName"
+							name="fName"
+							type="fName"
+							required
+							className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none sm:text-sm"
+							value={fName}
+							onChange={(e) => setFName(e.target.value)}
+						/>
+					</div>
 
+					<div>
+						<label htmlFor="lName" className="block text-sm font-medium">
+							Last Name
+						</label>
+						<input
+							id="lName"
+							name="lName"
+							type="lName"
+							required
+							className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none sm:text-sm"
+							value={lName}
+							onChange={(e) => setLName(e.target.value)}
+						/>
+					</div>
+					<div>
+						<label htmlFor="username" className="block text-sm font-medium">
+							Username
+						</label>
+						<input
+							id="username"
+							name="username"
+							type="username"
+							className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none sm:text-sm"
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+						/>
+					</div>
 					<div>
 						<label htmlFor="password" className="block text-sm font-medium">
 							Password
@@ -58,7 +108,6 @@ const Signup = () => {
 							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</div>
-
 					<div>
 						<button
 							type="submit"

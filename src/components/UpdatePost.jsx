@@ -1,18 +1,22 @@
 import { useState } from "react";
-import { updateADoc } from "@/utils/firebaseUtils"; // Adjust the import path if needed
-import { auth, db } from "../../firebase.config"; // Ensure db is imported correctly
+import { SocialSite, Post } from "@/utils/userDisplay";
 
-const UpdatePost = ({ post, onClose }) => {
-	const [title, setTitle] = useState(post.data.title);
-	const [content, setContent] = useState(post.data.content);
-	const [visibility, setVisibility] = useState(post.data.visibility);
+const UpdatePost = ({ post, user, onClose }) => {
+	const [title, setTitle] = useState(post.title);
+	const [content, setContent] = useState(post.content);
 	const [error, setError] = useState(null);
-
+	const [currentPost, setCurrentPost] = useState(new Post(post.creatorUid, title, content, post.creatorUsername, post.id))
 	const handleUpdate = async (e) => {
-		e.preventDefault(); // Prevent default form submission behavior
+		e.preventDefault();
 		try {
-			await updateADoc(db, "posts", { title, content, visibility }, post.id);
-				// Close the update form after successful update
+			let site = new SocialSite([],[]);
+			await site.setSite();
+					setCurrentPost(new Post())
+					const newPost = {
+						creatorUid: post.creatorUid, title, content, creatorUsername: post.creatorUsername, id: post.id
+					}
+					console.log(post)
+					site.updatePost(newPost, user.uid);
 				onClose();
 		} catch(err){
 			console.log(err)
@@ -51,20 +55,6 @@ const UpdatePost = ({ post, onClose }) => {
 							rows="4"
 							required
 						/>
-					</div>
-					<div>
-						<label htmlFor="visibility" className="block text-sm font-medium">
-							Visibility
-						</label>
-						<select
-							id="visibility"
-							value={visibility}
-							onChange={(e) => setVisibility(e.target.value)}
-							className="w-full px-3 py-2 border rounded-md shadow-sm"
-						>
-							<option value="public">Public</option>
-							<option value="private">Private</option>
-						</select>
 					</div>
 					<div className="flex justify-end space-x-4">
 						<button

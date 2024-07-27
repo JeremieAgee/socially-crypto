@@ -1,31 +1,29 @@
 "use client";
 import { useEffect, useState } from "react";
-import { auth, db } from "../../../firebase.config"; // Make sure to use the correct import path for firebase.config
-import Post from "@/components/Post"; 
+import { auth } from "../../../firebase.config";
+import PostComponent from "@/components/PostComponent"; 
 import LogoutButton from "@/components/LogoutButton";
 import AddPost from "@/components/AddPost"; 
-import { getAllDocs } from "@/utils/firebaseUtils";
+import { SocialSite, User } from "@/utils/userDisplay";
 
-const UsersPage = () => {
-  const [posts, setPosts] = useState([]);
+const UsersPage = () => { 
+  const [currentSite, setCurrentSite]= useState(new SocialSite());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAddPost, setShowAddPost] = useState(false);
-
+  const [userUid, setUserUid]= useState(auth.currentUser.uid);
+  const[currentUser, setCurrentUser] = useState(new User("","","","", userUid))
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
-        if (auth.currentUser) {
-          const fetchedPosts = await getAllDocs(db, "posts");
-          setPosts(fetchedPosts);
-        } else {
-          setPosts([]);
-        }
-      } catch (err) {
-        setError("Failed to fetch posts");
-      } finally {
+        let site = new SocialSite([],[]);
+        await site.setSite();
+        let user = site.findUser(userUid)
+        setCurrentUser(user);
+        setCurrentSite(site);
+        if (site.posts==null){
+        setError("Failed to fetch posts");}
         setLoading(false);
-      }
+
     };
 
     fetchPosts();
@@ -53,19 +51,19 @@ const UsersPage = () => {
 	<div>
       {showAddPost && (
         <div className="mb-8">
-          <AddPost onClose={handleAddPostClick} />
+          <AddPost onClose={handleAddPostClick} user={currentUser} />
         </div>
       )}
 	  </div>
 
       <h1 className="text-2xl font-bold mb-4">User Posts</h1>
      <div>
-	  {posts.length === 0 && !showAddPost ? (
+	  {currentSite.posts.length === 0 && !showAddPost ? (
         <p>No posts available</p>
       ) : (
         <div className="space-y-4">
-          {posts.map((post) => (
-            <Post key={post.id} post={post} />
+          {currentSite.posts.map((post) => (
+            <PostComponent key={post.id} post={post} user={currentUser} />
           ))}
         </div>
       )}</div>

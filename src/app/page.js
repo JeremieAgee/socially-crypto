@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Signup from "@/components/Signup";
 import Login from "@/components/Login";
-
 export default function Home() {
   const [logingIn, setLogingIn] = useState(false);
   const [signingUp, setSigningUp] = useState(false);
@@ -14,7 +13,7 @@ export default function Home() {
       setSigningUp(signup);
     };
   }
-
+  
   return (
     <main className="container mx-auto px-4 py-8">
      <section className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
