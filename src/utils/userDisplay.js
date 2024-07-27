@@ -58,20 +58,13 @@ class SocialSite {
         this.users = users;
         this.posts = posts;
         this.addUser = async (newUser) => {
-            const isUser = this.users.findUser(newUser.uid);
+            const isUser = this.findUser(newUser.uid);
+            const user = newUser;
             if (isUser) {
                 window.alert(`Username or email is already taken`)
             } else {
-                this.users.push(newUser);
-                const docId = addADoc(db, "users", newUser);
-                const user = {
-                    fName: newUser.fName,
-                    fName: newUser.lName,
-                    email:  newUser.email,
-                    username: newUser.username,
-                    id: docId,
-                }
-                updateADoc(db, "users", user, docId);
+                this.users.push(user);
+                return addADoc(db, "users", user);
             }
         }
         this.deleteUser = (userToDeleteUid, userUid) => {
@@ -88,15 +81,9 @@ class SocialSite {
             }
         }
         this.updateUser = (oldUser, userUid) => {
-            const userToUpdate = this.users.findUser(oldUser.Id);
-            const currentUser = this.findUser(userUid);
-            if (currentUser.isAdmin && userToUpdate) {
-                updateADoc(db, "users", oldUser, oldUser.id)
-            } else if (userToUpdate.uid === currentUser.uid) {
-                updateADoc(db, "users", oldUser, oldUser.id)
-            } else {
-                window.alert(`Failed to update user.`)
-            }
+                if(oldUser.uid===userUid){
+             updateADoc(db, "users", oldUser, oldUser.id)
+            } 
         }
         this.findUser = (userUid) => {
             const foundUser = this.users.find((user) => user.uid === userUid);

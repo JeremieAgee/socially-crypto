@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/utils/authUtils";
 import { auth } from "../../firebase.config";
-import { User, SocialSite } from "@/utils/userDisplay";
+import { SocialSite } from "@/utils/userDisplay";
 const Signup = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [fName, setFName] = useState("");
 	const [lName, setLName] = useState("");
 	const [username, setUsername] = useState("");
-	const [user, setUser] = useState(null)
+	const [isAdmin, setIsAdmin] = useState(false)
 	const router = useRouter();
 
 	const handleSubmit = async (e) => {
@@ -20,10 +20,27 @@ const Signup = () => {
 		try {
 			await registerUser(email, password);
 			if (auth.currentUser) {
-				setUser(new User(fName, lName, email, username, auth.currentUser.uid))
 				let site = new SocialSite();
 				site.setSite();
-				site.addUser(user);
+				const docId = await site.addUser({
+                    fName: fName,
+                    lName: lName,
+                    email:  email,
+                    username: username,
+					uid: auth.currentUser.uid,
+                    id: "docId",
+					isAdmin: isAdmin
+                });
+				let currentUser = {
+                    fName: fName,
+                    lName: lName,
+                    email:  email,
+                    username: username,
+					uid: auth.currentUser.uid,
+                    id: docId,
+					isAdmin: isAdmin
+                }
+                site.updateUser(currentUser, currentUser.uid);
 				router.push("/users");
 			} // Redirect to the Users page
 		} catch (error) {

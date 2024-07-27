@@ -5,15 +5,17 @@ import { SocialSite } from "@/utils/userDisplay";
 const PostComponent = ({ post, user }) => {
 	const [showUpdate, setShowUpdate] = useState(false);
 	const [currentSite, setCurrentSite]=useState(new SocialSite([],[]));
-	const [showEdits, setShowEdits]= useState(user.uid===post.creatorUid);
+	const [showEdits, setShowEdits]= useState(false);
+	const [site, setSite]= useState(setThisSite())
 	async function setThisSite(){
-		let site = new SocialSite(currentSite);
+		let currentSite = new SocialSite([],[]);
 		await site.setSite();
-		setCurrentSite(site);
+		setCurrentSite(currentSite);
+		let show = (user.uid===post.creatorUid);
+		setShowEdits(show);
 	}
 	const handleUpdateClick = () => {	
-		setThisSite()	
-		if(user.uid==post.creatorUid){
+		if(showEdits){
 		setShowUpdate(true); 
 		}
 	};
@@ -21,7 +23,7 @@ const PostComponent = ({ post, user }) => {
 		setShowUpdate(false);
 	};
 	async function handleDelete(){
-		setThisSite()
+		
 		let site = currentSite;
 		site.deletePost(post.id, user.uid);
 		setCurrentSite(site);
@@ -34,7 +36,8 @@ const PostComponent = ({ post, user }) => {
 				Posted by {post.creatorUsername || "Anonymous"}
 			</div>
 			
-			{showEdits && (<div>
+			{showEdits && (
+			<div>
 				<div className="absolute top-2 right-2 flex space-x-2">
 				<button
 					onClick={handleUpdateClick}

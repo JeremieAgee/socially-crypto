@@ -4,7 +4,7 @@ import { auth } from "../../../firebase.config";
 import PostComponent from "@/components/PostComponent"; 
 import LogoutButton from "@/components/LogoutButton";
 import AddPost from "@/components/AddPost"; 
-import { SocialSite, User } from "@/utils/userDisplay";
+import { SocialSite } from "@/utils/userDisplay";
 
 const UsersPage = () => { 
   const [currentSite, setCurrentSite]= useState(new SocialSite());
@@ -16,7 +16,7 @@ const UsersPage = () => {
     const fetchPosts = async () => {  
         let site = new SocialSite([],[]);
         await site.setSite();
-        let user = site.findUser(auth.currentUser.uid)
+        let user = await site.findUser(auth.currentUser.uid)
         setCurrentUser(user);
         setCurrentSite(site);
         if (site.posts==null){
