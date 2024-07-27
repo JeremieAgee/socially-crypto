@@ -11,10 +11,11 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAddPost, setShowAddPost] = useState(false);
-  const [userUid, setUserUid]= useState(auth.currentUser.uid);
+  const [userUid, setUserUid]= useState("");
   const[currentUser, setCurrentUser] = useState(new User("","","","", userUid))
   useEffect(() => {
     const fetchPosts = async () => {
+        setUserUid(auth.currentUser.uid)
         let site = new SocialSite([],[]);
         await site.setSite();
         let user = site.findUser(userUid)
