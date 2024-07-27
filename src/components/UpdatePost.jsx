@@ -5,18 +5,17 @@ const UpdatePost = ({ post, user, onClose }) => {
 	const [title, setTitle] = useState(post.title);
 	const [content, setContent] = useState(post.content);
 	const [error, setError] = useState(null);
-	const [currentPost, setCurrentPost] = useState(new Post(post.creatorUid, title, content, post.creatorUsername, post.id))
 	const handleUpdate = async (e) => {
 		e.preventDefault();
 		try {
 			let site = new SocialSite([],[]);
 			await site.setSite();
-					setCurrentPost(new Post())
+
 					const newPost = {
 						creatorUid: post.creatorUid, title, content, creatorUsername: post.creatorUsername, id: post.id
 					}
 					console.log(post)
-					site.updatePost(newPost, user.uid);
+					site.updatePost(newPost);
 				onClose();
 		} catch(err){
 			console.log(err)

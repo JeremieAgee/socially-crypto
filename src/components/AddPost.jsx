@@ -9,9 +9,18 @@ function AddPost({ onClose, user }) {
 		e.preventDefault();
 		let site = new SocialSite([],[]);
 		await site.setSite();
-		let thisPost = {creatorUid:currentUser.uid, title, content, creatorUsername:currentUser.username, id:""}
+		let thisPost = {creatorUid: currentUser.uid, title, content, creatorUsername:currentUser.username, id:""}
 		if (currentUser) {
-			site.addPost(thisPost);
+			const docId = await site.addPost(thisPost);
+			console.log(docId)
+			const post = {
+                creatorUid: thisPost.creatorUid,
+                title: thisPost.title,
+                content: thisPost.content,
+                creatorUsername: thisPost.creatorUsername,
+                id: docId
+            };
+			site.updatePost(post);
 			setTitle("");
 			setContent("");
 			

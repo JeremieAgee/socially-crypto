@@ -64,8 +64,14 @@ class SocialSite {
             } else {
                 this.users.push(newUser);
                 const docId = addADoc(db, "users", newUser);
-                newUser.id = docId;
-                updateADoc(db, "users", newUser, docId);
+                const user = {
+                    fName: newUser.fName,
+                    fName: newUser.lName,
+                    email:  newUser.email,
+                    username: newUser.username,
+                    id: docId,
+                }
+                updateADoc(db, "users", user, docId);
             }
         }
         this.deleteUser = (userToDeleteUid, userUid) => {
@@ -102,22 +108,14 @@ class SocialSite {
         }
         this.addPost = async (newPost) => {
             this.posts.push(newPost);
-            let docId = addADoc(db, "posts", newPost);
-            newPost.id = docId;
-            updateADoc(db, "users", newPost, docId);
+            return addADoc(db, "posts", newPost);
         }
-        this.deletePost = (oldPostId, userUid) => {
+        this.deletePost = (oldPostId) => {
             const postToDelete = this.findPost(oldPostId);
-            const currentUser = this.findUser(userUid);
-            if (currentUser) {
+            if (postToDelete) {
                 const postToRemove = this.findPost(oldPostId);
                 this.posts.splice(postToRemove, 1);
                 removeADoc(db, "posts", oldPostId)
-            } else if (postToDelete.creatorUid === userUid) {
-                this.posts.splice(postToDelete, 1)
-                removeADoc(db, "posts", postToDelete.id)
-            } else {
-                window.alert(`You are not the creator of post or an Admin.`)
             }
         }
         this.findPost = (postId) => {
@@ -128,10 +126,7 @@ class SocialSite {
                 console.log(`No post found with an id of ${postId}`)
             }
         }
-        this.updatePost = (oldPost, userUid) => {
-            const postToUpdate = this.findPost(oldPost.id);
-            const currentUser = this.findUser(userUid);
-
+        this.updatePost = (oldPost) => {
             updateADoc(db, "posts", oldPost, oldPost.id)
         }
         this.setSite = async () => {
