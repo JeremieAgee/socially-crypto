@@ -10,7 +10,6 @@ const UpdatePost = ({ post, user, onClose }) => {
 		try {
 			let site = new SocialSite([],[]);
 			await site.setSite();
-
 					const newPost = {
 						creatorUid: post.creatorUid, title, content, creatorUsername: post.creatorUsername, id: post.id
 					}
