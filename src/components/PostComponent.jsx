@@ -6,25 +6,22 @@ const PostComponent = ({ post, user }) => {
 	const [showUpdate, setShowUpdate] = useState(false);
 	const [currentSite, setCurrentSite]=useState(new SocialSite([],[]));
 	const [showEdits, setShowEdits]= useState(false);
-	const [site, setSite]= useState(setThisSite())
+	const sites = setThisSite();
 	async function setThisSite(){
-		let currentSite = new SocialSite([],[]);
-		await site.setSite();
-		setCurrentSite(currentSite);
+		let thisSite = new SocialSite([],[]);
+		await thisSite.setSite();
+		setCurrentSite(thisSite);
 		if (user.uid===post.creatorUid){
 		setShowEdits(true); 
 	}
 	}
 	const handleUpdateClick = () => {	
-		if(showEdits){
-		setShowUpdate(true); 
-		}
+		setShowUpdate(true);
 	};
 	const handleCloseUpdate = () => {
 		setShowUpdate(false);
 	};
 	async function handleDelete(){
-		
 		let site = currentSite;
 		site.deletePost(post.id, user.uid);
 		setCurrentSite(site);
