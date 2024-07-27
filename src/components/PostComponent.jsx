@@ -11,8 +11,9 @@ const PostComponent = ({ post, user }) => {
 		let currentSite = new SocialSite([],[]);
 		await site.setSite();
 		setCurrentSite(currentSite);
-		let show = (user.uid===post.creatorUid);
-		setShowEdits(show);
+		if (user.uid===post.creatorUid){
+		setShowEdits(true); 
+	}
 	}
 	const handleUpdateClick = () => {	
 		if(showEdits){
