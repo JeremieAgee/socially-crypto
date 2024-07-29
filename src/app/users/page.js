@@ -13,7 +13,7 @@ const UsersPage = () => {
   const [currentUser, setCurrentUser] = useState(socialSite.findUser(auth.currentUser.uid));
   useEffect(() => {
     const fetchPosts = async () => {
-      if (socialSite.posts.length != 0) {
+      if (socialSite) {
         setLoading(false);
       }
     };

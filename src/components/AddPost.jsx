@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { socialSite } from "@/utils/userDisplay";
 
-function AddPost({ onClose }, userUid) {
+function AddPost({ onClose, user} ) {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
-	const [currentUser, setCurrentUser] = useState(socialSite.findUser(userUid));
+	const [currentUser, setCurrentUser] = useState(user);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		let thisPost = { creatorUid: currentUser.uid, title, content, creatorUsername: currentUser.username, id: "" }

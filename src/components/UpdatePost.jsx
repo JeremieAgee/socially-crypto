@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { SocialSite, Post } from "@/utils/userDisplay";
+import { socialSite } from "@/utils/userDisplay";
 
-const UpdatePost = ({ post, user, onClose }) => {
+const UpdatePost = ({ post, userUid, onClose }) => {
 	const [title, setTitle] = useState(post.title);
 	const [content, setContent] = useState(post.content);
 	const [error, setError] = useState(null);
 	const handleUpdate = async (e) => {
 		e.preventDefault();
 		try {
-			
+			 if(userUid===post.uid){
+				socialSite.updatePost(post);
+			 }
 				onClose();
 		} catch(err){
 			console.log(err)

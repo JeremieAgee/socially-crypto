@@ -81,7 +81,7 @@ class SocialSite {
             }
         }
         this.updateUser = (oldUser, userUid) => {
-                if(oldUser.uid===userUid){
+            if(oldUser.uid===userUid){
              updateADoc(db, "users", oldUser, oldUser.id)
             } 
         }

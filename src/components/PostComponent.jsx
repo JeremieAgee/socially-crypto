@@ -1,5 +1,6 @@
 import { useState } from "react";
 import UpdatePost from "./UpdatePost";
+import { socialSite } from "@/utils/userDisplay";
 
 const PostComponent = ({ post, userUid }) => {
 	const [showUpdate, setShowUpdate] = useState(false);
@@ -7,11 +8,11 @@ const PostComponent = ({ post, userUid }) => {
 	const handleUpdateClick = () => {	
 		setShowUpdate(true)	
 	};
-	const handleCloseUpdate = () => {s
+	const handleCloseUpdate = () => {
 		setShowUpdate(false);
 	};
 	async function handleDelete(){
-		setCurrentSite();
+		socialSite.deletePost(post.id)
 	}
 	return (
 
@@ -36,7 +37,7 @@ const PostComponent = ({ post, userUid }) => {
 			</div>)} 
 			{showUpdate && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-					<UpdatePost post={post} onClose={handleCloseUpdate} user={user} />
+					<UpdatePost post={post} onClose={handleCloseUpdate} userUid={userUid} />
 				</div>
 			)}
 		</div>
