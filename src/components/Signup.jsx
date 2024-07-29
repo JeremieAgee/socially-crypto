@@ -31,7 +31,7 @@ const Signup = () => {
                 }
 				const docId = await socialSite.addUser(currentUser);
 				currentUser.id=docId;
-                socialSite.updateUser(currentUser, currentUser.uid);
+                socialSite.updateUser(currentUser);
 				router.push("/users");
 			} // Redirect to the Users page
 		} catch (error) {

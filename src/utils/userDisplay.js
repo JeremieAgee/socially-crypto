@@ -80,10 +80,8 @@ class SocialSite {
                 window.alert(`Failed to remove user.`)
             }
         }
-        this.updateUser = (oldUser, userUid) => {
-            if(oldUser.uid===userUid){
+        this.updateUser = (oldUser) => {
              updateADoc(db, "users", oldUser, oldUser.id)
-            } 
         }
         this.findUser = (userUid) => {
             const foundUser = this.users.find((user) => user.uid === userUid);
