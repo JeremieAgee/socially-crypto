@@ -1,29 +1,20 @@
 import { useState } from "react";
-import { SocialSite } from "@/utils/userDisplay";
+import { socialSite } from "@/utils/userDisplay";
 
-function AddPost({ onClose, user }) {
+function AddPost({ onClose }, userUid) {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
-	const [currentUser, setCurrentUser] = useState(user);
+	const [currentUser, setCurrentUser] = useState(socialSite.findUser(userUid));
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		let site = new SocialSite([],[]);
-		await site.setSite();
-		let thisPost = {creatorUid: currentUser.uid, title, content, creatorUsername:currentUser.username, id:""}
+		let thisPost = { creatorUid: currentUser.uid, title, content, creatorUsername: currentUser.username, id: "" }
 		if (currentUser) {
-			const docId = await site.addPost(thisPost);
+			const docId = await socialSite.addPost(thisPost);
 			console.log(docId)
-			const post = {
-                creatorUid: thisPost.creatorUid,
-                title: thisPost.title,
-                content: thisPost.content,
-                creatorUsername: thisPost.creatorUsername,
-                id: docId
-            };
-			site.updatePost(post);
+			thisPost.id = docId
+			socialSite.updatePost(thisPost);
 			setTitle("");
 			setContent("");
-			
 			onClose(); // Close the AddPost component after successful submission
 		} else {
 			console.log("User not authenticated");

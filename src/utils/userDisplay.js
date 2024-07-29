@@ -119,10 +119,12 @@ class SocialSite {
         this.setSite = async () => {
             const currentUsers = (await getAllDocs(db, "users"));
             const currentPosts = (await getAllDocs(db, "posts"));
-            this.posts = currentPosts;
-            this.users = currentUsers;
+            if(currentUsers){this.posts = currentPosts;
+            this.users = currentUsers;}
+            console.log('site set')
         }
-    }
+        this.setSite();
+    }    
 }
-
-export { User, Post, SocialSite }
+const socialSite = new SocialSite([],[]);
+export { User, Post, SocialSite, socialSite }

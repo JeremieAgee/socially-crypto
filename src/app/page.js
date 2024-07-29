@@ -2,21 +2,20 @@
 import { useState } from "react";
 import Signup from "@/components/Signup";
 import Login from "@/components/Login";
+
 export default function Home() {
   const [logingIn, setLogingIn] = useState(false);
   const [signingUp, setSigningUp] = useState(false);
-
-  // Updated to use function reference
   function handleLoginSignup(login, signup) {
     return () => {
       setLogingIn(login);
       setSigningUp(signup);
     };
   }
-  
+
   return (
     <main className="container mx-auto px-4 py-8">
-     <section className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+      <section className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4">Welcome to Socially Crypto!</h2>
         <p className="mb-6 text-gray-600">
           Please login or signup to get started.
@@ -35,8 +34,8 @@ export default function Home() {
             Signup
           </button>
         </div>
-        {logingIn && <Login/>}
-        {signingUp && <Signup/>}
+        {logingIn && <Login />}
+        {signingUp && <Signup />}
       </section>
     </main>
   );

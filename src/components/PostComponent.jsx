@@ -1,32 +1,20 @@
 import { useState } from "react";
 import UpdatePost from "./UpdatePost";
-import { SocialSite } from "@/utils/userDisplay";
 
-const PostComponent = ({ post, user }) => {
+const PostComponent = ({ post, userUid }) => {
 	const [showUpdate, setShowUpdate] = useState(false);
-	const [currentSite, setCurrentSite]=useState(new SocialSite([],[]));
-	const [showEdits, setShowEdits]= useState(false);
-	const sites = setThisSite();
-	async function setThisSite(){
-		let thisSite = new SocialSite([],[]);
-		await thisSite.setSite();
-		setCurrentSite(thisSite);
-		if (user.uid===post.creatorUid){
-		setShowEdits(true); 
-	}
-	}
+	const [showEdits, setShowEdits]= useState(userUid===post.creatorUid);
 	const handleUpdateClick = () => {	
-		setShowUpdate(true);
+		setShowUpdate(true)	
 	};
-	const handleCloseUpdate = () => {
+	const handleCloseUpdate = () => {s
 		setShowUpdate(false);
 	};
 	async function handleDelete(){
-		let site = currentSite;
-		site.deletePost(post.id, user.uid);
-		setCurrentSite(site);
+		setCurrentSite();
 	}
 	return (
+
 		<div className="relative p-6 bg-white rounded-lg shadow-md">
 			<h2 className="text-xl font-semibold mb-2">{post.title}</h2>
 			<p className="text-gray-700 mb-4">{post.content}</p>

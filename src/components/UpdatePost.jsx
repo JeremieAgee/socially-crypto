@@ -8,13 +8,7 @@ const UpdatePost = ({ post, user, onClose }) => {
 	const handleUpdate = async (e) => {
 		e.preventDefault();
 		try {
-			let site = new SocialSite([],[]);
-			await site.setSite();
-					const newPost = {
-						creatorUid: post.creatorUid, title, content, creatorUsername: post.creatorUsername, id: post.id
-					}
-					console.log(post)
-					site.updatePost(newPost);
+			
 				onClose();
 		} catch(err){
 			console.log(err)
