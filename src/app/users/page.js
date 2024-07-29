@@ -11,11 +11,11 @@ const UsersPage = () => {
   const [error, setError] = useState(null);
   const [showAddPost, setShowAddPost] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  let user = socialSite.findUser(auth.currentUser.uid);
-  setCurrentUser(user);
   useEffect(() => {
     const fetchPosts = async () => {
-      if (socialSite) {
+      let user = socialSite.findUser(auth.currentUser.uid);
+      setCurrentUser(user);
+      if (user) {
         setLoading(false);
       }
     };
