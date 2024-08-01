@@ -5,6 +5,7 @@ import {
     updateADoc,
 } from "./firebaseUtils";
 import { db } from "../../firebase.config";
+import PostComponent from "@/components/PostComponent";
 class User {
     constructor(fName, lName, email, username, uid, id = null, friends = null, pendingSentFriends = null, pendingReceivedFriends = null, isAdmin = false) {
         this.fName = fName;
@@ -34,14 +35,14 @@ class User {
     }
 }
 class Post {
-    constructor(creatorUid, title, body, creatorUsername, id = null,) {
+    constructor(creatorUid, title, content, creatorUsername, id = null,) {
         this.creatorUid = creatorUid;
         this.title = title;
-        this.body = body;
+        this.content = content;
         this.creatorUsername = creatorUsername;
         this.id = id;
-        this.updateBody = (newBody) => {
-            this.body = newBody;
+        this.updateContent = (newContent) => {
+            this.content = newContent;
         }
         this.updateTitle = (newTitle) => {
             this.title = newTitle;
@@ -54,17 +55,19 @@ class Post {
 }
 
 class SocialSite {
-    constructor(users=[], posts=[]) {
+    constructor(users = [], posts = []) {
         this.users = users;
         this.posts = posts;
         this.addUser = async (newUser) => {
             const isUser = this.findUser(newUser.uid);
-            const user = newUser;
+            const docId = await addADoc(db, "users", newUser);
+            console.log(docId);
+            const userToAdd = new User(newUser.fname, newUser.lname, newUser.email, newUser.username, newUser.uid, docId);
             if (isUser) {
                 window.alert(`Username or email is already taken`)
             } else {
-                this.users.push(user);
-                return addADoc(db, "users", user);
+                this.users.push(userToAdd);
+                return docId;
             }
         }
         this.deleteUser = (userToDeleteUid, userUid) => {
@@ -81,7 +84,12 @@ class SocialSite {
             }
         }
         this.updateUser = (oldUser) => {
-             updateADoc(db, "users", oldUser, oldUser.id)
+            const userToUpdate = this.findUser(oldUser.uid);
+            if(userToUpdate){
+                const index = this.posts.indexOf(userToUpdate)
+                this.users.splice(index, 1, oldUser)
+            updateADoc(db, "users", oldUser, oldUser.id)
+        }
         }
         this.findUser = (userUid) => {
             const foundUser = this.users.find((user) => user.uid === userUid);
@@ -92,8 +100,11 @@ class SocialSite {
             }
         }
         this.addPost = async (newPost) => {
-            this.posts.push(newPost);
-            return addADoc(db, "posts", newPost);
+            const docId = await addADoc(db, "posts", newPost);
+            const postToAdd = new Post(newPost.creatorUid, newPost.title, newPost.content, newPost.creatorUsername, docId);
+            this.posts.push(postToAdd);
+            console.log(postToAdd);
+            return docId;
         }
         this.deletePost = (oldPostId) => {
             const postToDelete = this.findPost(oldPostId);
@@ -112,17 +123,28 @@ class SocialSite {
             }
         }
         this.updatePost = (oldPost) => {
-            updateADoc(db, "posts", oldPost, oldPost.id)
+            const postToUpdate = this.findPost(oldPost.id);
+            if (postToUpdate) {
+                updateADoc(db, "posts", oldPost, oldPost.id)
+                const index = this.posts.indexOf(postToUpdate)
+                this.posts.splice(index, 1, oldPost);
+            }
         }
         this.setSite = async () => {
             const currentUsers = (await getAllDocs(db, "users"));
             const currentPosts = (await getAllDocs(db, "posts"));
-            if(currentUsers){this.posts = currentPosts;
-            this.users = currentUsers;}
-            console.log('site set')
+            const users = currentUsers.map(user => new User(user.fname, user.lname, user.email, user.username, user.uid, user.id, user.freinds, user.pendingSentFriends, user.pendingReceivedFriends, user.isAdmin));
+            this.users = users;
+            const posts = currentPosts.map(post => new Post(post.creatorUid, post.title, post.content, post.creatorUsername, post.id))
+            this.posts = posts;
+            console.log(this.posts);
+            console.log(this.users);
+        }
+        this.returnNewPost = (post) => {
+            return (<PostComponent post={post} userUid={post.creatorUid} />)
         }
         this.setSite();
-    }    
+    }
 }
-const socialSite = new SocialSite([],[]);
+const socialSite = new SocialSite([], []);
 export { User, Post, SocialSite, socialSite }

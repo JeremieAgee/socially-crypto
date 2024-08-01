@@ -1,3 +1,4 @@
+import React from 'react'; 
 import { useState } from "react";
 import UpdatePost from "./UpdatePost";
 import { socialSite } from "@/utils/userDisplay";
@@ -12,7 +13,12 @@ const PostComponent = ({ post, userUid }) => {
 		setShowUpdate(false);
 	};
 	async function handleDelete(){
-		socialSite.deletePost(post.id)
+		let user = socialSite.findUser(userUid);
+		if(userUid===post.creatorUid||user.isAdmin){
+		socialSite.deletePost(post.id);
+		} else{
+			window.alert(`Not the creator of post or an admin`);
+		}
 	}
 	return (
 

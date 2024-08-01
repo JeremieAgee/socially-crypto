@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/utils/authUtils";
 import { auth } from "../../firebase.config";
-import { socialSite, SocialSite } from "@/utils/userDisplay";
+import { socialSite } from "@/utils/userDisplay";
 const Signup = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -30,7 +30,8 @@ const Signup = () => {
 					isAdmin: isAdmin
                 }
 				const docId = await socialSite.addUser(currentUser);
-				currentUser.id=docId;
+			
+				currentUser.id = docId;
                 socialSite.updateUser(currentUser);
 				router.push("/users");
 			} // Redirect to the Users page

@@ -6,19 +6,18 @@ import {
 import { addADoc } from "./firebaseUtils";
 import { auth, db } from "../../firebase.config";
 
-async function registerUser(email, password, user) {
+async function registerUser(email, password) {
 	createUserWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
 			// Signed up
 			const user = userCredential.user;
-
+			return user;
 		})
 		.catch((error) => {
 			const errorCode = error.code;
 			const errorMessage = error.message;
 			console.log("error creating user: ", errorCode, errorMessage);
 		});
-		addADoc(db, "users", user)
 }
 
 async function login(email, password) {

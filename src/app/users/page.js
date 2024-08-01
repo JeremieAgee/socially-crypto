@@ -11,10 +11,14 @@ const UsersPage = () => {
   const [error, setError] = useState(null);
   const [showAddPost, setShowAddPost] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [site, setSite] = useState(socialSite)
   useEffect(() => {
     const fetchPosts = async () => {
       let user = socialSite.findUser(auth.currentUser.uid);
+      setPosts(socialSite.posts);
       setCurrentUser(user);
+      console.log(user);
       if (user) {
         setLoading(false);
       }
@@ -51,13 +55,13 @@ const UsersPage = () => {
           </div>
           <h1 className="text-2xl font-bold mb-4">User Posts</h1>
           <div>
-            {socialSite.posts.length === 0 && !showAddPost ? (
+            {site.posts.length === 0 && !showAddPost ? (
               <p>No posts available</p>
             ) : (
               <div className="space-y-4">
-                {socialSite.posts.map((post) => (
-                  <PostComponent key={post.id} post={post} userUid={currentUser.uid} />
-                ))}
+                {site.posts.map((post) => {
+                  return (<PostComponent key={post.id} post={post} userUid={currentUser.uid} />)
+                })}
               </div>
             )}</div>
           <LogoutButton className="mt-4" />
