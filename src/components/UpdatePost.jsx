@@ -8,14 +8,11 @@ const UpdatePost = ({ post, userUid, onClose }) => {
 	const [error, setError] = useState(null);
 	const handleUpdate = async (e) => {
 		e.preventDefault();
-		try {
-			 if(userUid===post.uid){
-				socialSite.updatePost(post);
-			 }
-				onClose();
-		} catch(err){
-			console.log(err)
+		const updatedPost = {
+			creatorUid: post.creatorUid, title: title, content: content, creatorUsername: post.creatorUsername, id: post.id
 		}
+				socialSite.updatePost(updatedPost, userUid);
+				onClose();
 	};
 
 	return (

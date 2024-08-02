@@ -6,6 +6,7 @@ import { socialSite } from "../utils/userDisplay";
 const PostComponent = ({ post, userUid }) => {
 	const [showUpdate, setShowUpdate] = useState(false);
 	const [showEdits, setShowEdits]= useState(userUid===post.creatorUid);
+	const [currentUserUid, setCurrentUserUid] = useState(userUid);
 	const handleUpdateClick = () => {	
 		setShowUpdate(true)	
 	};
@@ -43,7 +44,7 @@ const PostComponent = ({ post, userUid }) => {
 			</div>)} 
 			{showUpdate && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-					<UpdatePost post={post} onClose={handleCloseUpdate} userUid={userUid} />
+					<UpdatePost post={post} onClose={handleCloseUpdate} userUid={currentUserUid} />
 				</div>
 			)}
 		</div>

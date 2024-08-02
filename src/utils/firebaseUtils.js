@@ -14,11 +14,12 @@ import {
  * @returns {array} An array of objects from the collection
  */
 async function getAllDocs(db, collectionName) {
-	try {const snapshot = await getDocs(collection(db, collectionName));
-	const collectionList = snapshot.docs.map((doc) => ( doc.data()
-	));
-	return collectionList;
-} catch(error) {
+	try {
+		const snapshot = await getDocs(collection(db, collectionName));
+		const collectionList = snapshot.docs.map((doc) => (doc.data()
+		));
+		return collectionList;
+	} catch (error) {
 		console.log(error);
 	}
 }
@@ -72,10 +73,10 @@ async function updateADoc(
 ) {
 	try {
 		const docRef = doc(db, collectionName, objectId);
-		if(docRef){
-		updateDoc(docRef, collectionObject);
-		console.log(`${collectionObject}, ${objectId}`);
-		} else{
+		if (docRef) {
+			updateDoc(docRef, collectionObject);
+			console.log(`${collectionObject}, ${objectId}`);
+		} else {
 			console.log("No document found");
 		}
 	} catch (e) {

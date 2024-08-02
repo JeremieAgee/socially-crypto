@@ -13,7 +13,7 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			await login(email, password);
-			if(auth.currentUser){
+			if (auth.currentUser) {
 				router.push('/users')
 			}
 		} catch (error) {

@@ -35,7 +35,7 @@ class User {
     }
 }
 class Post {
-    constructor(creatorUid, title, content, creatorUsername, id = null,) {
+    constructor(creatorUid, title, content, creatorUsername, id = null) {
         this.creatorUid = creatorUid;
         this.title = title;
         this.content = content;
@@ -85,11 +85,11 @@ class SocialSite {
         }
         this.updateUser = (oldUser) => {
             const userToUpdate = this.findUser(oldUser.uid);
-            if(userToUpdate){
+            if (userToUpdate) {
                 const index = this.posts.indexOf(userToUpdate)
                 this.users.splice(index, 1, oldUser)
-            updateADoc(db, "users", oldUser, oldUser.id)
-        }
+                updateADoc(db, "users", oldUser, oldUser.id)
+            }
         }
         this.findUser = (userUid) => {
             const foundUser = this.users.find((user) => user.uid === userUid);
