@@ -1,5 +1,6 @@
+import React from "react";
 import { useState } from "react";
-import { socialSite } from "@/utils/userDisplay";
+import { socialSite } from "../utils/userDisplay";
 
 const UpdatePost = ({ post, userUid, onClose }) => {
 	const [title, setTitle] = useState(post.title);
